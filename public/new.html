@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Generar Vale</title></head>
+<body>
+  <h2>Generar Vale</h2>
+  <form id="f">
+    <label>Monto (USD): <input type="number" step="0.01" name="amount" required></label><br>
+    <label>Beneficiario (tel opcional): <input name="beneficiary"></label><br>
+    <label>Categoría: <input name="category" value="alimentos"></label><br>
+    <label>Días de validez: <input type="number" name="days_valid" value="30"></label><br>
+    <button type="submit">Generar</button>
+  </form>
+  <pre id="out"></pre>
+  <img id="qr" style="max-width:240px;display:none"/>
+<script>
+const ADMIN_TOKEN = 'demo-admin-token';
+document.getElementById('f').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target));
+  data.amount = parseFloat(data.amount);
+  const r = await fetch('/api/v1/vouchers', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-admin-token':ADMIN_TOKEN},
+    body: JSON.stringify(data)
+  });
+  const j = await r.json();
+  document.getElementById('out').textContent = JSON.stringify(j,null,2);
+  if (j.qrPng){ const img=document.getElementById('qr'); img.src=j.qrPng; img.style.display='block'; }
+});
+</script>
+</body>
+</html>

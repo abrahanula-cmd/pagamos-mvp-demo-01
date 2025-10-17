@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Canjear Vale</title></head>
+<body>
+  <h2>Canjear Vale (comercio)</h2>
+  <form id="f">
+    <label>ID: <input name="id" required></label><br>
+    <label>Nº de factura: <input name="invoice_number"></label><br>
+    <button>Canjear</button>
+  </form>
+  <pre id="out"></pre>
+<script>
+const ADMIN_TOKEN = 'demo-admin-token';
+document.getElementById('f').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target));
+  const r = await fetch('/api/v1/vouchers/'+encodeURIComponent(data.id)+'/redeem', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-admin-token':ADMIN_TOKEN},
+    body: JSON.stringify({ invoice_number: data.invoice_number || null })
+  });
+  const j = await r.json();
+  document.getElementById('out').textContent = JSON.stringify(j,null,2);
+});
+</script>
+</body>
+</html>
