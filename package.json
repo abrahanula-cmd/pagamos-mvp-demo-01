@@ -1,7 +1,6 @@
 {
   "name": "pagamos-mvp",
   "version": "1.0.0",
-  "description": "Págamos MVP demo (vouchers via QR) - simple Node/Express + SQLite",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
